@@ -1,0 +1,6 @@
+{
+  "data_lid":{
+    "dataset_git_url": "https://github.com/sahilswami96/SarcasmDetection_CodeMixed",
+    "dataset_file_path": "SarcasmDetection_CodeMixed/Dataset/Sarcasm_tweets_with_language.txt"
+  }
+}

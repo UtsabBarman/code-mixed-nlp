@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "code-mixed-nlp"
+version = "0.1.0"
+description = ""
+authors = ["Utsab Barman <utsab.barman.ju@gmailpoetry .com>"]
+readme = "README.md"
+packages = [{include = "code_mixed_nlp"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+tensorflow = "2.2.0"
+pandas = "^1.5.3"
+sklearn = "^0.0.post1"
+jupyter = "^1.0.0"
+lab = "^7.3"
+notebook = "^6.5.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
