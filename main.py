@@ -1,7 +1,11 @@
 
 import os
+import sys
 import argparse
-from ETL.DataDownload import download_dataset
+
+import pandas as pd
+
+from ETL.DataHandler import download_dataset, read_text_file_and_process_df
 from Utils.CommonUtils import load_json
 
 if __name__ == '__main__':
@@ -12,12 +16,35 @@ if __name__ == '__main__':
 
     exp_config = load_json(args.experiment_config)
 
-    dataset_path = os.path.join(
+    dataset_file_path = os.path.join(
         exp_config.get("data", "./data").get("dataset_dir", None),
         exp_config.get("data", "./data").get("dataset_git_file_path", None)
     )
-    if not os.path.exists(dataset_path):
+    if not os.path.exists(dataset_file_path):    # dataset download
         download_dataset(
             git_url=exp_config.get("data").get("dataset_git_url"),
             output_dir=exp_config.get("data", "./data").get("dataset_dir", None),
         )
+    else:
+        read_text_file_and_process_df(
+            text_file_path=dataset_file_path,
+            output_path=os.path.join(
+                exp_config.get("data", "./data").get("dataset_dir", None),
+                "code-mixed-lid-dataset"
+            )
+        )
+
+    expanded_csv_path = os.path.join(
+            exp_config.get("data", "./data").get("dataset_dir", None),
+            exp_config.get("data").get("dataset_csv", None)
+    )
+    word_file_path = os.path.join(
+            exp_config.get("data", "./data").get("dataset_dir", None),
+            exp_config.get("data").get("word_file", None)
+    )
+    if not os.path.exists(expanded_csv_path):  # if processed files are not present
+        print(" Open Jupyter Notebbok and Run Notebooks/Data_visualization.ipynb")
+        sys.exit(0)
+    else:
+        expanded_df = pd.read_csv(expanded_csv_path, index_col=0)
+        word_df = pd.read_csv(word_file_path, index_col=0)
