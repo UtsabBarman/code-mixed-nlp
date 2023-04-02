@@ -44,7 +44,7 @@ if __name__ == '__main__':
             exp_config.get("data").get("word_file", None)
     )
     if not os.path.exists(expanded_csv_path) and not os.path.exists(word_file_path):  # if processed files are not present
-        print(" Open Jupyter Notebbok and Run Notebooks/Data_visualization.ipynb")
+        print(" Open Jupyter notebook and run Notebooks/Data_visualization.ipynb to get the data")
         sys.exit(0)
     else:
         expanded_df = pd.read_csv(expanded_csv_path, index_col=0)
