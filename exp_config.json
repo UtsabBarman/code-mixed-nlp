@@ -5,7 +5,9 @@
     "dataset_dir": "data",
     "dataset_csv": "code-mixed-lid-dataset.csv",
     "dataset_xy_json": "xy.json",
-    "word_file": "word_lowercased_freq.csv"
+    "word_file": "word_lowercased_freq.csv",
+    "num_of_fold": 5,
+    "cv_split_file": "cv_split.json"
   }
 
 }
