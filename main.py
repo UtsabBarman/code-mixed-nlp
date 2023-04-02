@@ -1,11 +1,12 @@
 
 import os
 import sys
+import json
 import argparse
 
 import pandas as pd
 
-from ETL.DataHandler import download_dataset, read_text_file_and_process_df
+from ETL.DataHandler import download_dataset, read_text_file_and_process_df, convert_data_set_xy
 from Utils.CommonUtils import load_json
 
 if __name__ == '__main__':
@@ -42,9 +43,16 @@ if __name__ == '__main__':
             exp_config.get("data", "./data").get("dataset_dir", None),
             exp_config.get("data").get("word_file", None)
     )
-    if not os.path.exists(expanded_csv_path):  # if processed files are not present
+    if not os.path.exists(expanded_csv_path) and not os.path.exists(word_file_path):  # if processed files are not present
         print(" Open Jupyter Notebbok and Run Notebooks/Data_visualization.ipynb")
         sys.exit(0)
     else:
         expanded_df = pd.read_csv(expanded_csv_path, index_col=0)
         word_df = pd.read_csv(word_file_path, index_col=0)
+        dataset = convert_data_set_xy(df_dataset=expanded_df, df_word_list=word_df)
+        data_json_path = os.path.join(
+            exp_config.get("data", "./data").get("dataset_dir", None),
+            exp_config.get("data").get("dataset_xy_json", None)
+        )
+        with open(data_json_path, 'w') as jf:
+            json.dump(dataset, jf)

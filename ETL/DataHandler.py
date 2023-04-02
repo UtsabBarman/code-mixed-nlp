@@ -3,6 +3,8 @@ import os
 
 import pandas as pd
 
+from tqdm import tqdm
+from Utils.CommonUtils import normalize_token
 
 def download_dataset(git_url:str, output_dir:str):
     """
@@ -62,3 +64,34 @@ def read_text_file_and_process_df(text_file_path:str, output_path:str):
     if not output_path.endswith(".csv"):
         output_path = f"{output_path}.csv"
     df.to_csv(output_path)
+
+
+def convert_data_set_xy(df_dataset:pd.DataFrame, df_word_list:pd.DataFrame, max_len:int=50):
+    words = df_word_list.unique_word_types.tolist()
+    words.sort()
+    words.insert(0, '_pad_')
+    langs = ["_pad_", "en", "hi", "rest"]
+    dataset = []
+    for ix, row in tqdm(df_dataset.iterrows()):
+        tid = row["tweet_id"]
+        text = [normalize_token(x=t) for t in eval(row["text"])]
+        text = [words.index(x) for x in text]
+        lang = [langs.index(x) for x in eval(row["lang"])]
+        r = max_len - len(text)
+        if r >= 1:  # pre padding with '_pad_'
+            temp = [0] * r
+            text = temp + text
+            lang = temp + lang
+        else:
+            text = text[:max_len]
+            lang = lang[:max_len]
+
+        dataset.append(
+            {
+                "id":str(tid),
+                "x":text,
+                "y":lang
+            }
+        )
+    return dataset
+
